@@ -1,0 +1,54 @@
+services:
+  # Define el servicio web
+  web:
+    build: .
+    container_name: webserver
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "80:80"
+    networks:
+      - web_network
+    restart: always
+    depends_on:
+      - db
+
+  # Define el servicio de BD
+  db:
+    image: mariadb:10.11.2
+    container_name: database
+    environment:
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MARIADB_DATABASE: ${DB_DATABASE}
+      MARIADB_USER: ${DB_USER}
+      MARIADB_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - database_data:/var/lib/mysql
+    networks:
+      - web_network
+    restart: always
+
+ # Define el servicio de phpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: phpmyadmin
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+    ports:
+      - 8081:80
+    volumes:
+      - phpmyadmin_data:/sessions
+    networks:
+      - web_network
+    restart: always
+
+
+volumes:
+  database_data:
+  phpmyadmin_data:
+
+
+networks:
+  web_network:
+    driver: bridge

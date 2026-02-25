@@ -1,0 +1,69 @@
+<?php
+
+namespace App\Controller\Admin;
+
+use App\Entity\User;
+use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityPersistedEvent;
+
+class UserCrudController extends AbstractCrudController
+{
+    public static function getEntityFqcn(): string
+    {
+        return User::class;
+    }
+
+    /*
+    public function configureFields(string $pageName): iterable
+    {
+        return [
+            IdField::new('id'),
+            TextField::new('title'),
+            TextEditorField::new('description'),
+        ];
+    }
+    */
+
+     /**
+     * @var UserPasswordHasherInterface
+     */
+    private $userPasswordHasher;
+
+    /**
+     * Inicializamos el PasswordHasher
+     * @param UserPasswordHasherInterface $userPasswordHasher
+     */
+    public function __construct(UserPasswordHasherInterface $userPasswordHasher)
+    {
+        $this->userPasswordHasher = $userPasswordHasher;
+    }
+
+    public function updateEntity($entity)
+    {
+        $this->hashPassWord($entity);
+        parent::updateEntity($entity);
+    }
+
+    public function persistEntity($entity)
+    {
+        this->hashPassWord($entity);
+        parent::persistEntity($entity);
+    }
+
+    public function hashPassWord(BeforeEntityPersistedEvent $event)
+    {
+    	$entity = $event->getEntityInstance();
+
+    	if (!($entity instanceof User)) {
+           return;
+	}
+
+    $entity->setPassword($this->userPasswordHasher->hashPassword($entity, $entity->getPlainPassword()));
+    }
+
+}
