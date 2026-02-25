@@ -1,0 +1,21 @@
+
+###> symfony/framework-bundle ###
+dgarmar/.env.local
+dgarmar/.env.local.php
+dgarmar/.env.*.local
+dgarmar/config/secrets/prod/prod.decrypt.private.php
+dgarmar/public/bundles/
+dgarmar/var/
+dgarmar/vendor/
+###< symfony/framework-bundle ###
+
+###> phpunit/phpunit ###
+dgarmar/phpunit.xml
+dgarmar/.phpunit.cache/
+###< phpunit/phpunit ###
+
+###> symfony/asset-mapper ###
+dgarmar/public/assets/
+dgarmar/assets/vendor/
+###< symfony/asset-mapper ###
+dgarmar/.env
