@@ -1,0 +1,5 @@
+# Evita que se listen los archivos si no hay un índice
+Options -Indexes
+
+# Define qué archivo debe cargarse por defecto
+DirectoryIndex login.php
