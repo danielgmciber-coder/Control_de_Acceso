@@ -1,0 +1,16 @@
+services:
+  blog:
+    container_name: web_robo_sesion
+    image: php:8.2-apache
+    restart: always
+    ports:
+      - '8081:80'
+    volumes:
+      - ./robo-de-sesion.php:/var/www/html/robo-de-sesion.php
+      - ./data:/var/www/html/data
+    networks:
+      - web_network
+
+networks:
+  web_network:
+    driver: bridge
