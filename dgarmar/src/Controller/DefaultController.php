@@ -15,4 +15,10 @@ final class DefaultController extends AbstractController
             'controller_name' => 'DefaultController',
         ]);
     }
+
+    #[Route('/', name: 'root_redirect')]
+    public function rootRedirect(): Response
+    {
+        return $this->redirect('/login');
+    }
 }

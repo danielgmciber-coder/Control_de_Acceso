@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Access Denied{% endblock %}
+
+{% block body %}
+    <div style="max-width:800px;margin:2rem auto;font-family:Arial,Helvetica,sans-serif;">
+        <h1>Access Denied</h1>
+        <p>Lo siento, no tienes permisos suficientes para ver esta página.</p>
+        {% if app.user %}
+            <p>Usuario: {{ app.user.userIdentifier }}</p>
+        {% endif %}
+        <p style="margin-top:1rem">
+            <a href="/home">Volver a Home</a>
+            {% if not app.user %}
+                | <a href="/login">Iniciar sesión</a>
+            {% endif %}
+        </p>
+    </div>
+{% endblock %}

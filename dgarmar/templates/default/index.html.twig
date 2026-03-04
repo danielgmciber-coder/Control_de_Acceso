@@ -16,5 +16,13 @@
         <li>Your controller at <code>/home/kali/symfony/dgarmar/src/Controller/DefaultController.php</code></li>
         <li>Your template at <code>/home/kali/symfony/dgarmar/templates/default/index.html.twig</code></li>
     </ul>
+    <div style="margin-top:1rem">
+        <form action="{{ path('app_logout') }}" method="post" style="display:inline">
+            <button type="submit">Logout</button>
+        </form>
+        <a href="/crud/user" style="margin-left:1rem">
+            <button type="button">admin-pannel</button>
+        </a>
+    </div>
 </div>
 {% endblock %}
