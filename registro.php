@@ -1,6 +1,4 @@
 <?php
-ini_set('session.use_only_cookies', 1);
-ini_set('session.cookie_httponly', 1);
 
 session_start();
 
@@ -33,11 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($nombre) || empty($password) || empty($confirma)) {
         $mensaje = 'Por favor, complete todos los campos.';
 
-    } elseif (strlen($nombre) < 3 || strlen($nombre) > 30) {
-        $mensaje = 'El nombre de usuario debe tener entre 3 y 30 caracteres.';
-
-    } elseif (!preg_match('/^[a-zA-Z0-9_]+$/', $nombre)) {
-        $mensaje = 'El nombre de usuario solo puede contener letras, números y guiones bajos.';
+    } elseif (!filter_var($nombre, FILTER_VALIDATE_EMAIL)) {
+        $mensaje = 'El formato del correo es incorrecto.';
 
     } elseif (strlen($password) < 8) {
         $mensaje = 'La contraseña debe tener al menos 8 caracteres.';
@@ -51,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute(['nombre' => $nombre]);
 
         if ($stmt->fetch()) {
-            $mensaje = 'Ese nombre de usuario ya está en uso. Elige otro.';
+            $mensaje = 'Ese correo electrónico ya está en uso. Elige otro.';
         } else {
             // Registrar usuario con hash bcrypt
             $hash = password_hash($password, PASSWORD_DEFAULT, ['cost' => 12]);
@@ -148,8 +143,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <?php if ($tipo !== 'exito'): ?>
         <form method="POST" action="" autocomplete="off">
-            <label for="nombre">Usuario:</label>
-            <input type="text" id="nombre" name="nombre" maxlength="30"
+            <label for="nombre">Correo electrónico:</label>
+            <input type="text" id="nombre" name="nombre" maxlength="255"
                    value="<?php echo isset($_POST['nombre']) ? e($_POST['nombre']) : ''; ?>" required>
 
             <label for="password">Contraseña:</label>

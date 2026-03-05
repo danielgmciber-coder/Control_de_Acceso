@@ -1,6 +1,4 @@
 <?php
-ini_set('session.use_only_cookies', 1);
-ini_set('session.cookie_httponly', 1);
 
 session_start();
 
@@ -22,6 +20,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($nombre) || empty($password)) {
         $mensaje = "Por favor, complete todos los campos.";
+    } elseif (!filter_var($nombre, FILTER_VALIDATE_EMAIL)) {
+        $mensaje = "El formato del correo es incorrecto.";
     } else {
         $stmt = $pdo->prepare("SELECT id, nombre, password, rol FROM usuarios WHERE nombre = :nombre LIMIT 1");
         $stmt->execute(['nombre' => $nombre]);
@@ -109,7 +109,7 @@ if (isset($_GET['error']) && $_GET['error'] === 'auth') {
         <?php endif; ?>
 
         <form method="POST" action="" autocomplete="off">
-            <label for="nombre">Usuario:</label>
+            <label for="nombre">Correo electrónico:</label>
             <input type="text" id="nombre" name="nombre" 
                    value="<?php echo isset($_POST['nombre']) ? e($_POST['nombre']) : ''; ?>" required>
             
